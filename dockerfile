@@ -10,10 +10,13 @@ RUN a2enmod rewrite
 # Copy files to container
 COPY . /var/www/html/
 
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod 644 /var/www/html/users.json \
-    && chmod 644 /var/www/html/error.log
+# Create required files if they don't exist
+RUN touch /var/www/html/users.json /var/www/html/error.log
+
+# Set proper permissions in a single RUN command
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod 644 /var/www/html/users.json && \
+    chmod 644 /var/www/html/error.log
 
 # Set working directory
 WORKDIR /var/www/html
